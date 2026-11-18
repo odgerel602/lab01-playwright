@@ -42,6 +42,38 @@ npx playwright show-trace test-results/<test-folder>/trace.zip
 npx playwright codegen https://www.saucedemo.com
 ```
 
+## Codegen — бичүүлсэн код ба өөрийн бичсэн кодын харьцуулалт
+
+`npx playwright codegen https://www.saucedemo.com` ажиллуулж, хөтөч дээр нэвтрэх үйлдлийг
+гараар хийж бичүүлсэн. Гарсан түүхий код: [codegen/codegen-recorded.spec.ts](codegen/codegen-recorded.spec.ts)
+
+```ts
+await page.locator('[data-test="username"]').click();
+await page.locator('[data-test="username"]').click();
+await page.locator('[data-test="username"]').click();
+await page.locator('[data-test="username"]').fill('standart_username');
+await page.locator('[data-test="password"]').click();
+await page.locator('[data-test="password"]').fill('secret_sauce');
+await page.locator('[data-test="password"]').press('Enter');
+```
+
+Бичлэгийн үеэр хэрэглэгчийн нэрийг `standart_username` гэж буруу бичсэн тул нэвтрэлт
+амжилтгүй болсон — гэхдээ codegen үүнийг **анзаараагүй**, учир нь ямар ч assertion үүсгэдэггүй.
+Энэ нь codegen-ийн хамгийн чухал сул талыг тод харуулж байна.
+
+| | Codegen | Миний бичсэн (`tests/mytest.spec.ts`) |
+|---|---|---|
+| Locator | `locator('[data-test="username"]')` — CSS selector | `getByPlaceholder('Username')`, `getByRole('button', { name: 'Login' })` — хэрэглэгчийн харж буй зүйлээр |
+| Илүүдэл алхам | Нэг талбар дээр 3 удаа `click()` — хэрэглэгчийн бүх товшилтыг бичдэг | Зөвхөн шаардлагатай `fill()` / `click()` |
+| Assertion | **Байхгүй** — буруу нэвтрэлт ч "амжилттай" тест болно | `toHaveURL`, `toHaveText`, `toBeVisible`, `toHaveCount` |
+| Давталт | Код бүр шууд бичигдэнэ | `login()`, `logout()` helper функцээр дахин ашигласан |
+| Тестийн нэр | `'test'` | Юу шалгаж буйг тайлбарласан нэр |
+| Төгсгөл | Logout байхгүй | Тест бүр logout-оор төгсдөг |
+
+**Дүгнэлт:** Codegen нь locator олох, эхлэлийн код гаргахад хурдан бөгөөд тустай боловч
+түүнийг шууд тест болгон ашиглах боломжгүй — assertion нэмэх, илүүдэл алхмыг цэвэрлэх,
+давтагдсан хэсгийг функц болгох зэргээр заавал гараар засварлах шаардлагатай.
+
 ## Trace viewer — санаатай унагасан тест
 
 Амжилттай нэвтрэх тестийн assertion-ыг санаатайгаар буруу болгож

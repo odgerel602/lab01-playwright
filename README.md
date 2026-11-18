@@ -46,7 +46,7 @@ npx playwright codegen https://www.saucedemo.com
 
 `npx playwright codegen https://www.saucedemo.com` ажиллуулж, хөтөч дээр нэвтрэх → бараа
 сагслах → гарах үйлдлийг гараар хийж, мөн сайтын бусад хэсгийг (цэс, буруу нэвтрэлт)
-туршиж үзсэн. Гарсан түүхий код (~60 мөр): [codegen/codegen-recorded.spec.ts](codegen/codegen-recorded.spec.ts)
+туршиж үзсэн. Гарсан түүхий код (55 мөр): [codegen/codegen-recorded.spec.ts](codegen/codegen-recorded.spec.ts)
 
 Жишээ хэсэг:
 
@@ -63,7 +63,7 @@ await page.locator('[data-test="logout-sidebar-link"]').click();
 
 Ажиглалт:
 - Codegen **бүх** товшилтыг, тэр дундаа санамсаргүй болон судлах зорилготой товшилтыг
-  (`dblclick`, текст хуулах `Ctrl+C`, SVG `path`) бичсэн тул ~60 алхамтай болсон. Миний
+  (`dblclick`, текст хуулах `Ctrl+C`, SVG `path`) бичсэн тул 55 алхамтай болсон. Миний
   гараар бичсэн ижил сценари ~10 мөр.
 - Буруу нэрээр (`odjduheuh`) нэвтрэх оролдлого бичигдсэн ч codegen алдааны мессеж гарсныг
   **шалгаагүй** — ямар ч assertion үүсгэдэггүй тул энэ кодыг ажиллуулахад алдаа гарсан ч
@@ -76,7 +76,7 @@ await page.locator('[data-test="logout-sidebar-link"]').click();
 | | Codegen | Миний бичсэн (`tests/mytest.spec.ts`) |
 |---|---|---|
 | Locator | `locator('[data-test="username"]')` — CSS selector | `getByPlaceholder('Username')`, `getByRole('button', { name: 'Login' })` — хэрэглэгчийн харж буй зүйлээр |
-| Илүүдэл алхам | ~60 алхам: давхар `click()`, `dblclick`, `Ctrl+C`, SVG товшилт | Зөвхөн шаардлагатай `fill()` / `click()` |
+| Илүүдэл алхам | 55 алхам: давхар `click()`, `dblclick`, `Ctrl+C`, SVG товшилт | Зөвхөн шаардлагатай `fill()` / `click()` |
 | Assertion | **Байхгүй** — буруу нэвтрэлт ч "амжилттай" тест болно | `toHaveURL`, `toHaveText`, `toBeVisible`, `toHaveCount` |
 | Давталт | Код бүр шууд бичигдэнэ | `login()`, `logout()` helper функцээр дахин ашигласан |
 | Тестийн нэр | `'test'` | Юу шалгаж буйг тайлбарласан нэр |

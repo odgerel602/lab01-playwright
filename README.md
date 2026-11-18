@@ -44,31 +44,44 @@ npx playwright codegen https://www.saucedemo.com
 
 ## Codegen — бичүүлсэн код ба өөрийн бичсэн кодын харьцуулалт
 
-`npx playwright codegen https://www.saucedemo.com` ажиллуулж, хөтөч дээр нэвтрэх үйлдлийг
-гараар хийж бичүүлсэн. Гарсан түүхий код: [codegen/codegen-recorded.spec.ts](codegen/codegen-recorded.spec.ts)
+`npx playwright codegen https://www.saucedemo.com` ажиллуулж, хөтөч дээр нэвтрэх → бараа
+сагслах → гарах үйлдлийг гараар хийж, мөн сайтын бусад хэсгийг (цэс, буруу нэвтрэлт)
+туршиж үзсэн. Гарсан түүхий код (~60 мөр): [codegen/codegen-recorded.spec.ts](codegen/codegen-recorded.spec.ts)
+
+Жишээ хэсэг:
 
 ```ts
-await page.locator('[data-test="username"]').click();
-await page.locator('[data-test="username"]').click();
-await page.locator('[data-test="username"]').click();
-await page.locator('[data-test="username"]').fill('standart_username');
 await page.locator('[data-test="password"]').click();
+await page.locator('[data-test="password"]').click();          // давхар товшилт
 await page.locator('[data-test="password"]').fill('secret_sauce');
-await page.locator('[data-test="password"]').press('Enter');
+await page.locator('[data-test="login-button"]').click();
+await page.getByText('$15.99Add to cart').first().click();     // үнэ + товчны текст нийлсэн эмзэг locator
+await page.locator('div').filter({ hasText: 'Swag Labs' }).nth(4).click(); // index-ээр — DOM өөрчлөгдвөл эвдэрнэ
+await page.locator('path').first().click();                    // SVG дүрс дээр товшсон — утгагүй алхам
+await page.locator('[data-test="logout-sidebar-link"]').click();
 ```
 
-Бичлэгийн үеэр хэрэглэгчийн нэрийг `standart_username` гэж буруу бичсэн тул нэвтрэлт
-амжилтгүй болсон — гэхдээ codegen үүнийг **анзаараагүй**, учир нь ямар ч assertion үүсгэдэггүй.
-Энэ нь codegen-ийн хамгийн чухал сул талыг тод харуулж байна.
+Ажиглалт:
+- Codegen **бүх** товшилтыг, тэр дундаа санамсаргүй болон судлах зорилготой товшилтыг
+  (`dblclick`, текст хуулах `Ctrl+C`, SVG `path`) бичсэн тул ~60 алхамтай болсон. Миний
+  гараар бичсэн ижил сценари ~10 мөр.
+- Буруу нэрээр (`odjduheuh`) нэвтрэх оролдлого бичигдсэн ч codegen алдааны мессеж гарсныг
+  **шалгаагүй** — ямар ч assertion үүсгэдэггүй тул энэ кодыг ажиллуулахад алдаа гарсан ч
+  тест "амжилттай" болно.
+- `div.nth(4)`, `path.first()`, `getByText('$15.99Add to cart')` зэрэг locator-ууд DOM-ын
+  байрлал, үнээс хамаардаг тул сайт бага зэрэг өөрчлөгдөхөд эвдэрнэ.
+- Цөөн тохиолдолд (`getByRole('button', { name: 'Open Menu' })`) codegen орчин үеийн
+  locator санал болгосон нь сайн тал.
 
 | | Codegen | Миний бичсэн (`tests/mytest.spec.ts`) |
 |---|---|---|
 | Locator | `locator('[data-test="username"]')` — CSS selector | `getByPlaceholder('Username')`, `getByRole('button', { name: 'Login' })` — хэрэглэгчийн харж буй зүйлээр |
-| Илүүдэл алхам | Нэг талбар дээр 3 удаа `click()` — хэрэглэгчийн бүх товшилтыг бичдэг | Зөвхөн шаардлагатай `fill()` / `click()` |
+| Илүүдэл алхам | ~60 алхам: давхар `click()`, `dblclick`, `Ctrl+C`, SVG товшилт | Зөвхөн шаардлагатай `fill()` / `click()` |
 | Assertion | **Байхгүй** — буруу нэвтрэлт ч "амжилттай" тест болно | `toHaveURL`, `toHaveText`, `toBeVisible`, `toHaveCount` |
 | Давталт | Код бүр шууд бичигдэнэ | `login()`, `logout()` helper функцээр дахин ашигласан |
 | Тестийн нэр | `'test'` | Юу шалгаж буйг тайлбарласан нэр |
-| Төгсгөл | Logout байхгүй | Тест бүр logout-оор төгсдөг |
+| Бүтэц | Нэг урт `test('test')` дотор олон сценари холилдсон | Сценари бүр тусдаа, хамааралгүй тест |
+| Төгсгөл | Logout дунд нь бичигдсэн, төгсгөлд нь сагсан дээр дуусдаг | Тест бүр logout-оор төгсдөг |
 
 **Дүгнэлт:** Codegen нь locator олох, эхлэлийн код гаргахад хурдан бөгөөд тустай боловч
 түүнийг шууд тест болгон ашиглах боломжгүй — assertion нэмэх, илүүдэл алхмыг цэвэрлэх,

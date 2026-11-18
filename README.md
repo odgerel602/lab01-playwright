@@ -42,6 +42,30 @@ npx playwright show-trace test-results/<test-folder>/trace.zip
 npx playwright codegen https://www.saucedemo.com
 ```
 
+## Trace viewer — санаатай унагасан тест
+
+Амжилттай нэвтрэх тестийн assertion-ыг санаатайгаар буруу болгож
+(`toHaveText('Products')` → `toHaveText('Productz')`) `--trace on`-оор ажиллуулсан:
+
+```
+Error: expect(locator).toHaveText(expected) failed
+Locator:  getByTestId('title')
+Expected: "Productz"
+Received: "Products"
+  13 × locator resolved to <span class="title" data-test="title">Products</span>
+     - unexpected value "Products"
+```
+
+Playwright 5 секундийн турш 13 удаа дахин шалгаад (auto-retry) унасан. Trace viewer дээр
+алдаа гарсан алхам улаанаар тэмдэглэгдэж, тухайн агшны DOM snapshot дээр гарчиг "Products"
+байгааг харж болно — өөрөөр хэлбэл алдаа сайтад биш, тестэд байгааг шууд тогтоох боломжтой.
+
+- Trace файл: [docs/failed-test-trace.zip](docs/failed-test-trace.zip) — `npx playwright show-trace docs/failed-test-trace.zip`
+  эсвэл <https://trace.playwright.dev> дээр чирж оруулж үзнэ.
+- Унасан агшны скриншот: [docs/failed-test-screenshot.png](docs/failed-test-screenshot.png)
+
+Шалгасны дараа assertion-ыг буцааж зассан тул үндсэн тестүүд бүгд амжилттай ажилладаг.
+
 ## Playwright ба Selenium — өөрийн ажиглалт
 
 1. Playwright-ийн **auto-wait** нь хамгийн мэдэгдэхүйц ялгаа байлаа — нэг ч `sleep` эсвэл explicit wait бичээгүй ч тест тогтвортой ажилласан; Selenium-д `WebDriverWait` гараар бичих шаардлагатай.

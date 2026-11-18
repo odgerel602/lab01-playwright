@@ -1,0 +1,20 @@
+{
+  "name": "lab01-playwright",
+  "version": "1.0.0",
+  "description": "Lab01: UI automation tests with Playwright (saucedemo.com)",
+  "scripts": {
+    "test": "playwright test",
+    "test:trace": "playwright test --trace on",
+    "test:video": "playwright test --video on",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen https://www.saucedemo.com"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^26.6.6"
+  }
+}

@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Playwright temporary output (traces/videos/screenshots of each run)
+test-results/
+/blob-report/
+/playwright/.cache/
+
+# NOTE: playwright-report/ is intentionally NOT ignored —
+# the lab requires the HTML report to be committed.
